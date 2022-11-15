@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/css/style.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    {% block title%}
+  {% endblock%}
+ 
+  </head>
+  <body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand"href="{{url_for('home')}}">Rate Tol</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link " href="{{url_for('home')}}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('tariftol')}}">Tarif Tol</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('restarea')}}">Rest Area</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('callcenter')}}">Call Center</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+      <div class="container">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+
+ <!-- SECTION CHATBOX -->
+ <div class="chatbox-wrapper">
+  <div class="chatbox-toggle bg-blue-500 text-white">
+      <i class='bx bx-message-dots'></i>
+  </div>
+  <div class="chatbox-message-wrapper">
+      <div class="chatbox-message-header bg-white">
+          <div class="chatbox-message-profile">
+              <img src="{{url_for('static',filename='assets/img/chatbot-profile.png')}}" alt="chatbot-profile" class="chatbox-message-img">
+              <div>
+                  <h4 class="chatbox-message-name">AI CHATBOT</h4>
+                  <p class="chatbox-message-status text-gray-500">Online</p>
+              </div>
+          </div>
+         
+      </div>
+      <div id="chatbot" class="chatbox-message-content bg-gray-300 flex flex-col">
+          <!-- <div id="chatbox-user" class="chatbox-message-item sent">
+               <span class="chatbox-message-item-text">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, perferendis?
+              </span>
+          </div>
+          <div id="chatbox-bot" class="chatbox-message-item received">
+              <span class="chatbox-message-item-text">
+                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, perferendis?
+              </span>
+          </div> -->
+      </div>
+      <div class="chatbox-message-bottom bg-white">
+          <form action="#" class="chatbox-message-form bg-gray-300">
+             <textarea name="msg" id="text" cols="30" rows="1" class="chatbox-message-input" placeholder="Ketik Sesuatu"></textarea>
+              <button type="submit" id="send" class="chatbox-message-submit text-blue-500"><i class='bx bx-send' ></i></button>
+          </form>
+      </div>
+  </div>
+</div>
+
+
+  
+<script src="{{url_for('static',filename='assets/js/script.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
+</html>
+  
