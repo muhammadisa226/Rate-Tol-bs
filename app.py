@@ -36,31 +36,30 @@ db.create_all()
 class Register(Resource):
    #post data user ke database
    def post(self):
-      dataname = request.form.get('name')
-      datausername = request.form.get('username')
-      dataemail = request.form.get('email')
-      datapassword = request.form.get('password')
+      datauser = request.get_json()
+      dataname = datauser['name']
+      datausername = datauser['username']
+      dataemail = datauser['email']
+      datapassword = datauser['password']
       #cek username,email  & password ada 
       if dataname and datausername and dataemail and datapassword:
          #post ke db
          user = UserModel(name=dataname, username=datausername,email=dataemail,password=datapassword)
          db.session.add(user)
          db.session.commit()
-         return make_response(jsonify({'message':'Register Berhasil',
-                                       'data':
-                                          {
+         return make_response(jsonify({'message':
+                                          'Register Berhasil',
                                              'name':dataname,
                                              'username':datausername,
                                              'email':dataemail,
-                                             }
-                                          }),{'code': 200})
+                                             }),{'code': 200})
       return make_response(jsonify({'msg':'Pastikan Semua field Terisi'}), 404)
    
 class Login(Resource):
     #post data user ke database
    def post(self):
-      datausername = request.form.get('username')
-      datapassword = request.form.get('password')
+      datausername = request.get_json['username']
+      datapassword = request.get_json['password']
       #QUERY kecocokan data
       queryUsername =[data.username for data in UserModel.query.all()]
       queryPassword =[data.password for data in UserModel.query.all()]
@@ -74,14 +73,11 @@ class Login(Resource):
                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
             },app.config['SECRET_KEY'] ,algorithm='HS256')
          return make_response(jsonify({'message':'Login Berhasil',
-                                       'data':
-                                          {
                                              'name':querydata.name,
                                              'username':querydata.username,
                                              'email':querydata.email,
                                              'token':token,
-                                             }
-                                          }),{'code': 200})
+                                             }),{'code': 200})
       #login gagal
       return make_response(jsonify({'msg':'Login Gagal'}), 404)
    
