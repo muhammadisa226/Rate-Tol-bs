@@ -1,13 +1,13 @@
 #import library
-from flask import Flask, render_template, request, make_response, jsonify
-from flask_restful import Resource, Api
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+import datetime
+import os
 
 ##import library pendukung
 import jwt
-import os
-import datetime
+from flask import Flask, jsonify, make_response, render_template, request
+from flask_cors import CORS
+from flask_restful import Api, Resource
+from flask_sqlalchemy import SQLAlchemy
 
 #inisialisai objek flask
 app = Flask(__name__)
@@ -25,6 +25,7 @@ app.config['SECRET_KEY'] = "inirahasia"
 #membuat model database User
 class UserModel(db.Model):
  id = db.Column(db.Integer, primary_key=True)  
+ name = db.Column(db.String(50))
  username = db.Column(db.String(50))
  email = db.Column(db.String(100))
  password = db.Column(db.String(100))
@@ -35,16 +36,24 @@ db.create_all()
 class Register(Resource):
    #post data user ke database
    def post(self):
+      dataname = request.form.get('name')
       datausername = request.form.get('username')
       dataemail = request.form.get('email')
       datapassword = request.form.get('password')
       #cek username,email  & password ada 
-      if datausername and dataemail and datapassword:
+      if dataname and datausername and dataemail and datapassword:
          #post ke db
-         user = UserModel(username=datausername,email=dataemail,password=datapassword)
+         user = UserModel(name=dataname, username=datausername,email=dataemail,password=datapassword)
          db.session.add(user)
          db.session.commit()
-         return make_response(jsonify({'msg':'Register Berhasil'}),{'code': 200})
+         return make_response(jsonify({'message':'Register Berhasil',
+                                       'data':
+                                          {
+                                             'name':dataname,
+                                             'username':datausername,
+                                             'email':dataemail,
+                                             }
+                                          }),{'code': 200})
       return make_response(jsonify({'msg':'Pastikan Semua field Terisi'}), 404)
    
 class Login(Resource):
@@ -52,11 +61,11 @@ class Login(Resource):
    def post(self):
       datausername = request.form.get('username')
       datapassword = request.form.get('password')
-      
       #QUERY kecocokan data
       queryUsername =[data.username for data in UserModel.query.all()]
       queryPassword =[data.password for data in UserModel.query.all()]
       if datausername in queryUsername and datapassword in queryPassword : 
+         querydata = UserModel.query.filter_by(username=datausername).first()
          #login sukses
          #generatetoken
          token = jwt.encode(
@@ -64,7 +73,15 @@ class Login(Resource):
                "username":queryUsername,
                "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=10)
             },app.config['SECRET_KEY'] ,algorithm='HS256')
-         return make_response(jsonify({'msg':'Login Berhasil', 'token':token}),{'code': 200})
+         return make_response(jsonify({'message':'Login Berhasil',
+                                       'data':
+                                          {
+                                             'name':querydata.name,
+                                             'username':querydata.username,
+                                             'email':querydata.email,
+                                             'token':token,
+                                             }
+                                          }),{'code': 200})
       #login gagal
       return make_response(jsonify({'msg':'Login Gagal'}), 404)
    
